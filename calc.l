@@ -3,12 +3,24 @@
   extern int yylval;
 %}
 
-digit [0-9]
+%%
+
+[0-9]+      {
+              yylval = atoi(yytext);
+              return NUM;
+            }
+[a-z]       {
+              yylval = yytext[0] - 'a';
+              return IDENTIFIER;
+            }
+
+[*+-/()=;]  return *yytext;
+[ \t\n]     ;
+print       return print;
+.         yyerror("Invalid syntax");
 
 %%
 
-{digit}+ {yylval = atoi(yytext); return NUM;}
-[*+\n] {return *yytext;}
-. {}
-
-%%
+int yywrap(void){
+  return 1;
+}

@@ -387,8 +387,8 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    3,    3,    1,    1,    1,    1,    4,    4,    4,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    3,
+        3,    3,    3,    3,    3,    3,    3,    4,    4,    4,
         4,    4,    4,    4,    4,    4,    4,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -458,7 +458,7 @@ char *yytext;
 #line 1 "calc.l"
 #line 2 "calc.l"
   #include "y.tab.h"
-  extern int yylval;
+  int number;
 #line 463 "lex.yy.c"
 
 #define INITIAL 0
@@ -646,7 +646,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 8 "calc.l"
+#line 6 "calc.l"
 
 
 #line 653 "lex.yy.c"
@@ -734,26 +734,30 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 10 "calc.l"
-{yylval = atoi(yytext); return NUM;}
+#line 8 "calc.l"
+{
+              number = atoi(yytext);
+              yylval = makeLeafNode(number);
+              return NUM;
+            }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 11 "calc.l"
-{return *yytext;}
+#line 14 "calc.l"
+return *yytext;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 12 "calc.l"
-{}
+#line 15 "calc.l"
+yyerror("Invalid syntax");
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 14 "calc.l"
+#line 17 "calc.l"
 ECHO;
 	YY_BREAK
-#line 757 "lex.yy.c"
+#line 761 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1751,9 +1755,11 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 14 "calc.l"
+#line 17 "calc.l"
 
 
 
-//int yywrap(void) {return 1;}
+int yywrap(void){
+  return 1;
+}
 

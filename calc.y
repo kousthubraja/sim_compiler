@@ -1,18 +1,37 @@
 %{
   void yyerror (char *s);
+
+  #include <stdio.h>
+  #include <stdlib.h>
+
+  #define YYSTYPE Node*
+  #include "exptree.h"
+  #include "exptree.c"
+
   #include "lex.yy.c"
 %}
 
 %token NUM
+%left '+' '-'
+%left '*' '/'
 
 %%
-pgm     : expr '\n' {printf("%d\n", $1); exit(0);};
-expr    : expr '+' expr {$$ = $1 + $3;};
-expr    : NUM {$$ = $1;};
+program         : program statement
+                    | statement;
+statement       :  expr '\n' {printf("%d\n", eval($1));}
+                    | '\n';
+
+expr            : expr '*' expr {$$ = makeOperatorNode('*',$1,$3);}
+                  | expr '-' expr {$$ = makeOperatorNode('-',$1,$3);}
+                  | expr '+' expr {$$ = makeOperatorNode('+',$1,$3);}
+                  | expr '/' expr {$$ = makeOperatorNode('/',$1,$3);}
+                  | '(' expr ')' {$$ = $2;}
+                  |  NUM {$$ = $1;};
 %%
 
 int main(void){
   return yyparse();
+  return 0;
 }
 
 void yyerror (char *s){

@@ -1,14 +1,21 @@
 %{
   #include "y.tab.h"
-  extern int yylval;
+  int number;
 %}
 
-digit [0-9]
+%%
+
+[0-9]+      {
+              number = atoi(yytext);
+              yylval = makeLeafNode(number);
+              return NUM;
+            }
+
+[*+-/()\n]  return *yytext;
+.         yyerror("Invalid syntax");
 
 %%
 
-{digit}+ {yylval = atoi(yytext); return NUM;}
-[*+\n] {return *yytext;}
-. {}
-
-%%
+int yywrap(void){
+  return 1;
+}

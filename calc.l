@@ -1,5 +1,8 @@
 %{
+  #include <stdio.h>
   #include "y.tab.h"
+  #include <stdlib.h>
+
   int number;
 %}
 
@@ -10,8 +13,14 @@
               yylval = makeLeafNode(number);
               return NUM;
             }
-
-[*+-/()\n]  return *yytext;
+read        {return READ;}
+write       {return WRITE;}
+[a-z]       {
+              yylval=makeLeafNode(yytext[0]-'a');
+              return ID;
+            }
+[*+-/()=;\n]  return *yytext;
+[ \t]       return;
 .         yyerror("Invalid syntax");
 
 %%

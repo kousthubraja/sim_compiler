@@ -36,6 +36,12 @@ int eval(Node *root){
       case '-':
         return eval(root->left) - eval(root->right);
         break;
+      case '<':
+        if(eval(root->left) < eval(root->right)) return 1; else return 0;
+        break;
+      case '>':
+        if(eval(root->left) > eval(root->right)) return 1; else return 0;
+        break;
     }
   }
 }

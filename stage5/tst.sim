@@ -1,0 +1,1 @@
+a=3;b=6;read(c);d = a*b + c;write(d);
